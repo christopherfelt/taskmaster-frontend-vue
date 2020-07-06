@@ -1,19 +1,37 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
     <div>Username: {{ user.username }} Email: {{ user.email }}</div>
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <header class="py-5">
+      <div class="text-center"><h1 class="title">TaskMaster</h1></div>
+    </header>
+    <main class="container">
+      <div class="row mb-3 d-flex justify-content-center">
+        <div
+          class="col-5-lg col-8-md col-12-sm bg-light shadow p-2 rounded d-flex justify-content-center"
+        >
+          <list-form />
+        </div>
+      </div>
+      <div class="row d-flex justify-content-center">
+        <div class="col-10">
+          <div id="lists" class="card-columns border pt-3 px-3">
+            <List />
+          </div>
+        </div>
+      </div>
+    </main>
+    <footer></footer>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
-
+import ListForm from "../components/ListForm";
+import List from "../components/List";
 export default {
   name: "Home",
   components: {
-    HelloWorld,
+    ListForm,
+    List,
   },
   computed: {
     user() {
@@ -22,3 +40,10 @@ export default {
   },
 };
 </script>
+<style lang="css" scoped>
+@import url("https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Lato&display=swap");
+.title {
+  font-family: "Gochi Hand", cursive;
+  font-size: 4rem;
+}
+</style>
