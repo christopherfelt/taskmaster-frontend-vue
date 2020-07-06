@@ -1,4 +1,4 @@
-# jwt1
+# Task Master Frontend
 
 ## Project setup
 ```
