@@ -2,12 +2,12 @@
   <div class="list">
     <div id="" class="card rounded card-width">
       <div class="card-body p-0">
-        <div class="d-block" style="background-color: #ff0000">
+        <div class="d-block" :style="'background-color: ' + list.color">
           <span
             id=" "
             class="card-title d-inline text-center ml-2 mt-2 gochi-hand-font list-title"
           >
-            List Title
+            {{ list.title }}
           </span>
           <button
             type="button"
@@ -54,6 +54,7 @@ export default {
   data() {
     return {};
   },
+  props: ["list"],
   computed: {},
   methods: {},
   components: {

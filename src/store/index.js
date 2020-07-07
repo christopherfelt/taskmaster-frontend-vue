@@ -3,6 +3,7 @@ import Vuex from "vuex";
 import axios from "axios";
 import VueRouter from "vue-router";
 import router from "../router/index";
+import { ListStore } from "./List";
 
 Vue.use(Vuex);
 
@@ -101,5 +102,7 @@ export default new Vuex.Store({
       router.push({ name: "Home" });
     },
   },
-  modules: {},
+  modules: {
+    ListStore,
+  },
 });

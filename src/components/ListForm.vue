@@ -1,6 +1,6 @@
 <template>
   <div class="list-form">
-    <form class="form-inline" onsubmit="app.listController.addList(event)">
+    <form class="form-inline" @submit.prevent="">
       <div class="form-group">
         <label class="font-weight-bold mr-1" for="title">List Name: </label>
         <input
@@ -10,6 +10,7 @@
           class="form-control mr-1"
           placeholder="Todo, Groceries etc ..."
           aria-describedby="helpId"
+          v-model="title"
         />
         <label class="mr-1" for="listColor"
           ><span class="font-weight-bold mr-1">Color: </span>
@@ -19,6 +20,7 @@
             type="color"
             name="listColor"
             value="#ff0000"
+            v-model="color"
           />
         </label>
         <button type="submit" class="btn btn-primary">
@@ -33,10 +35,21 @@
 export default {
   name: "list-form",
   data() {
-    return {};
+    return {
+      title: "",
+      color: "#9932CC",
+    };
   },
   computed: {},
-  methods: {},
+  methods: {
+    submitList() {
+      this.$store.dispatch("createNewList", {
+        title: this.title,
+        color: this.color,
+      });
+      this.title = "";
+    },
+  },
   components: {},
 };
 </script>

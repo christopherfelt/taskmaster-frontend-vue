@@ -15,7 +15,7 @@
       <div class="row d-flex justify-content-center">
         <div class="col-10">
           <div id="lists" class="card-columns border pt-3 px-3">
-            <List />
+            <list v-for="list in lists" :key="list.id" :list="list" />
           </div>
         </div>
       </div>
@@ -29,6 +29,10 @@ import ListForm from "../components/ListForm";
 import List from "../components/List";
 export default {
   name: "Home",
+  mounted() {
+    this.$store.dispatch("getUserData");
+    this.$store.dispatch("getAllLists");
+  },
   components: {
     ListForm,
     List,
@@ -36,6 +40,9 @@ export default {
   computed: {
     user() {
       return this.$store.state.authUser;
+    },
+    lists() {
+      return this.$store.state.ListStore.lists;
     },
   },
 };
