@@ -14,7 +14,7 @@
         </label>
       </div>
       <div class="d-inline pr-3">
-        <button class="btn ml-3 remove-task text-right" onclick="">
+        <button class="btn ml-3 remove-task text-right" @click="deleteTask">
           <i class="fas fa-trash-alt"></i>
         </button>
       </div>
@@ -34,6 +34,9 @@ export default {
     updateTask() {
       this.task.complete = !this.task.complete;
       this.$store.dispatch("updateTask", this.task);
+    },
+    deleteTask() {
+      this.$store.dispatch("deleteTask", this.task);
     },
   },
   components: {},

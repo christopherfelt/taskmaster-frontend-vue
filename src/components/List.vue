@@ -23,7 +23,8 @@
         <button
           type="button"
           class="btn btn-outline-danger ml-2 p-1"
-          onclick=""
+          v-show="tasksCompleted"
+          @click="removeCompleted"
         >
           <small>Remove Completed</small>
         </button>
@@ -69,6 +70,13 @@ export default {
     tasks() {
       return this.$store.state.TaskStore.tasks[this.list.id];
     },
+    tasksCompleted() {
+      if (this.tasks) {
+        return this.tasks.filter((e) => e.complete == true).length > 0;
+      } else {
+        return false;
+      }
+    },
   },
   methods: {
     submitTask() {},
@@ -80,6 +88,14 @@ export default {
         title: this.title,
         listId: this.list.id,
       });
+    },
+    removeCompleted() {
+      for (let i = 0; i < this.tasks.length; i++) {
+        let task = this.tasks[i];
+        if (task.complete) {
+          this.$store.dispatch("deleteTask", task);
+        }
+      }
     },
   },
   components: {

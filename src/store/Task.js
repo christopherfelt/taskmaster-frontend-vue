@@ -60,5 +60,13 @@ export const TaskStore = {
         console.error(error);
       }
     },
+    async deleteTask({ dispatch }, data) {
+      try {
+        let res = await api.delete(
+          "" + data.list_id + "/tasks/" + data.id + "/"
+        );
+        dispatch("getTasksByListId", data.list_id);
+      } catch (error) {}
+    },
   },
 };
