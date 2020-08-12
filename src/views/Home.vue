@@ -30,8 +30,9 @@ import List from "../components/List";
 export default {
   name: "Home",
   mounted() {
-    this.$store.dispatch("getUserData");
-    this.$store.dispatch("getAllLists");
+    if (this.$store.state.isAuthenticated) {
+      this.$store.dispatch("getAllLists");
+    }
   },
   components: {
     ListForm,
@@ -43,6 +44,14 @@ export default {
     },
     lists() {
       return this.$store.state.ListStore.lists;
+    },
+    isAuthenticated() {
+      return this.$store.state.isAuthenticated;
+    },
+  },
+  watch: {
+    isAuthenticated: function() {
+      this.$store.dispatch("getAllLists");
     },
   },
 };

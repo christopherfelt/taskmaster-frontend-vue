@@ -12,13 +12,13 @@
           <button
             type="button"
             class="btn d-inline float-right remove-list"
-            onclick=""
+            @click="deleteList"
           >
             X
           </button>
         </div>
         <p class="card-text">
-          <Task />
+          <Task v-for="task in tasks" :key="task.id" :task="task" />
         </p>
         <button
           type="button"
@@ -27,7 +27,7 @@
         >
           <small>Remove Completed</small>
         </button>
-        <form class="form-inline mx-1 my-1">
+        <form class="form-inline mx-1 my-1" submit.prevent="">
           <div class="">
             <label for="task"></label>
             <input
@@ -36,8 +36,13 @@
               class="form-control d-inline"
               placeholder="new task"
               aria-describedby="new task"
+              v-model="title"
             />
-            <button type="submit" class="btn btn-outline-info ml-3" d-inline>
+            <button
+              type="button"
+              class="btn btn-outline-info ml-3"
+              @click="createNewTask"
+            >
               <i class="fas fa-plus    "></i>
             </button>
           </div>
@@ -51,12 +56,32 @@
 import Task from "./Task";
 export default {
   name: "List",
+  mounted() {
+    this.$store.dispatch("getTasksByListId", this.list.id);
+  },
   data() {
-    return {};
+    return {
+      title: "",
+    };
   },
   props: ["list"],
-  computed: {},
-  methods: {},
+  computed: {
+    tasks() {
+      return this.$store.state.TaskStore.tasks[this.list.id];
+    },
+  },
+  methods: {
+    submitTask() {},
+    deleteList() {
+      this.$store.dispatch("deleteList", this.list.id);
+    },
+    createNewTask() {
+      this.$store.dispatch("createNewTask", {
+        title: this.title,
+        listId: this.list.id,
+      });
+    },
+  },
   components: {
     Task,
   },

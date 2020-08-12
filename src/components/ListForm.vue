@@ -1,6 +1,6 @@
 <template>
   <div class="list-form">
-    <form class="form-inline" @submit.prevent="">
+    <form class="form-inline" @submit.prevent="submitList">
       <div class="form-group">
         <label class="font-weight-bold mr-1" for="title">List Name: </label>
         <input

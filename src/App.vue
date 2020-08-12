@@ -9,6 +9,15 @@
   </div>
 </template>
 
+<script>
+export default {
+  beforeCreate() {
+    this.$store.dispatch("setBearer");
+    this.$store.dispatch("getUserData");
+  },
+};
+</script>
+
 <style>
 @import url("https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Lato&display=swap");
 

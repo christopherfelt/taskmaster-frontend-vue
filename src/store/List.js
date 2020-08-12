@@ -1,5 +1,3 @@
-const { Store } = require("vuex");
-
 import axios from "axios";
 import router from "../router";
 
@@ -15,7 +13,6 @@ let api = axios.create({
   timeout: 3000,
   withCredentials: true,
   headers: {
-    Authorization: `JWT ${localStorage.getItem("token")}`,
     "Content-Type": "application/json",
   },
   xhrFields: {
@@ -33,9 +30,37 @@ export const ListStore = {
     },
   },
   actions: {
+    setBearer({}) {
+      api.defaults.headers.authorization = `JWT ${localStorage.getItem(
+        "token"
+      )}`;
+    },
     async getAllLists({ commit, dispatch }) {
-      let res = await api.get("");
-      commit("setAllLists", res.data);
+      try {
+        let res = await api.get("");
+        commit("setAllLists", res.data);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async createNewList({ commit, dispatch }, listData) {
+      try {
+        let res = await api.post("", listData);
+        dispatch("getAllLists");
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async deleteList({ dispatch }, listId) {
+      try {
+        await api.delete("" + listId);
+        dispatch("getAllLists");
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    clearLists({ commit }) {
+      commit("setAllLists", []);
     },
   },
 };

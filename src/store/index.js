@@ -4,21 +4,28 @@ import axios from "axios";
 import VueRouter from "vue-router";
 import router from "../router/index";
 import { ListStore } from "./List";
+import { TaskStore } from "./Task";
 
 Vue.use(Vuex);
 
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.xsrfHeadername = "X-CSRFToken";
 
-// let base = window.location.host.includes("localhost")
-//   ? "//localhost:3000/"
-//   : "/";
+let base = window.location.host.includes("localhost")
+  ? "//localhost:3000/"
+  : "/";
 
-// let api = axios.create({
-//   baseURL: base + "api/",
-//   timeout: 3000,
-//   withCredentials: true,
-// });
+let api = axios.create({
+  baseURL: "http://127.0.0.1:8000/",
+  timeout: 3000,
+  withCredentials: true,
+  headers: {
+    "Content-Type": "application/json",
+  },
+  xhrFields: {
+    withCredentials: true,
+  },
+});
 
 export default new Vuex.Store({
   state: {
@@ -26,7 +33,6 @@ export default new Vuex.Store({
     isAuthenticated: false,
     jwt: localStorage.getItem("token"),
     endpoints: {
-      obtainJWT: "http://127.0.0.1:8000/auth/obtain_token/",
       refrshJWT: "http://127.0.0.1:8000/auth/refresh_token/",
       baseUrl: "http://127.0.0.1:8000/",
     },
@@ -46,10 +52,16 @@ export default new Vuex.Store({
     },
   },
   actions: {
+    setBearer({}) {
+      api.defaults.headers.authorization = `JWT ${localStorage.getItem(
+        "token"
+      )}`;
+    },
     async login({ commit, dispatch }, userData) {
       try {
-        let res = await axios.post(this.state.endpoints.obtainJWT, userData);
+        let res = await api.post("auth/obtain_token/", userData);
         commit("updateToken", res.data.token);
+        dispatch("setBearer");
         dispatch("getUserData");
       } catch (error) {
         console.error(error);
@@ -57,26 +69,12 @@ export default new Vuex.Store({
     },
     async getUserData({ commit, dispatch }) {
       try {
-        let base = {
-          baseURL: this.state.endpoints.baseUrl,
-          headers: {
-            Authorization: `JWT ${this.state.jwt}`,
-            "Content-Type": "application/json",
-          },
-          xhrFields: {
-            withCredentials: true,
-          },
-        };
-        const axiosInstance = axios.create(base);
-        let res = await axiosInstance({
-          url: "/user/",
-          method: "get",
-          params: {},
-        });
+        let res = await api.get("user");
         commit("setAuthUser", {
           authUser: res.data,
           isAuthenticated: true,
         });
+        dispatch("setBearer");
         router.push({ name: "Home" });
       } catch (error) {
         console.error(error);
@@ -99,10 +97,12 @@ export default new Vuex.Store({
         isAuthenticated: false,
       });
       commit("removeToken");
+      dispatch("clearLists");
       router.push({ name: "Home" });
     },
   },
   modules: {
     ListStore,
+    TaskStore,
   },
 });

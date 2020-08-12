@@ -3,9 +3,14 @@
     <div class="pl-5 my-1 d-flex justify-content-between item-div">
       <div class="text-left d-inline task-div align-self-center ">
         <label class="checkbox-container" id="">
-          <input type="checkbox" class="" onclick="" checked />
+          <input
+            type="checkbox"
+            class=""
+            @click="updateTask"
+            v-model="task.complete"
+          />
           <span class="checkmark"></span>
-          <span class="item-title">Task Title</span>
+          <span class="item-title">{{ task.title }}</span>
         </label>
       </div>
       <div class="d-inline pr-3">
@@ -23,8 +28,14 @@ export default {
   data() {
     return {};
   },
+  props: ["task"],
   computed: {},
-  methods: {},
+  methods: {
+    updateTask() {
+      this.task.complete = !this.task.complete;
+      this.$store.dispatch("updateTask", this.task);
+    },
+  },
   components: {},
 };
 </script>
